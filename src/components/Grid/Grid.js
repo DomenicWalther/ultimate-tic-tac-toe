@@ -8,15 +8,7 @@ const Grid = () => {
   const [moves, setMoves] = React.useState(0);
 
   React.useEffect(() => {
-    const nodeArray = [];
-    for (let row = 0; row < 3; row++) {
-      const currentRow = [];
-      for (let col = 0; col < 3; col++) {
-        currentRow.push({ value: "", rowIndex: row, colIndex: col });
-      }
-      nodeArray.push(currentRow);
-    }
-    setNodes(nodeArray);
+    setNodes(initialArray());
   }, []);
 
   React.useEffect(() => {
@@ -27,6 +19,17 @@ const Grid = () => {
     console.log("No winner yet!");
   }, [currentPlayerX]);
 
+  function initialArray() {
+    const nodeArray = [];
+    for (let row = 0; row < 3; row++) {
+      const currentRow = [];
+      for (let col = 0; col < 3; col++) {
+        currentRow.push({ value: "", rowIndex: row, colIndex: col });
+      }
+      nodeArray.push(currentRow);
+    }
+    return nodeArray;
+  }
   function createField(array) {
     const field = array.map((row) => {
       return (
@@ -68,12 +71,18 @@ const Grid = () => {
     }
   }
 
+  function resetGame() {
+    setNodes(initialArray());
+    setCurrentPlayerX(true);
+    setMoves(0);
+  }
   // changeField(0, 0, "O");
 
   return (
     <div>
       {field}
       <h3>{`Current Player: ${currentPlayerX ? "X" : "O"}`}</h3>
+      <button onClick={resetGame}>Reset Game</button>
     </div>
   );
 };
