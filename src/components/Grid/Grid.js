@@ -16,8 +16,27 @@ const Grid = () => {
   }, [nodes]);
 
   React.useEffect(() => {
-    console.log("No winner yet!");
+    let value = checkRows();
+    if (value !== undefined) {
+      console.log(`Winner is: `, value === 3 ? "X" : "O");
+    }
   }, [currentPlayerX]);
+
+  function checkRows() {
+    for (let i = 0; i < nodes.length; i++) {
+      let rowValue = 0;
+      nodes[i].forEach((item) => {
+        if (item.value === "X") {
+          rowValue++;
+        } else if (item.value === "O") {
+          rowValue--;
+        }
+      });
+      if (rowValue === 3 || rowValue === -3) {
+        return rowValue;
+      }
+    }
+  }
 
   function initialArray() {
     const nodeArray = [];
@@ -76,7 +95,6 @@ const Grid = () => {
     setCurrentPlayerX(true);
     setMoves(0);
   }
-  // changeField(0, 0, "O");
 
   return (
     <div>
