@@ -5,6 +5,7 @@ const Grid = () => {
   const [nodes, setNodes] = React.useState([]);
   const [field, setField] = React.useState([]);
   const [currentPlayerX, setCurrentPlayerX] = React.useState(true);
+  const [moves, setMoves] = React.useState(0);
 
   React.useEffect(() => {
     const nodeArray = [];
@@ -21,6 +22,10 @@ const Grid = () => {
   React.useEffect(() => {
     setField(createField(nodes));
   }, [nodes]);
+
+  React.useEffect(() => {
+    console.log("No winner yet!");
+  }, [currentPlayerX]);
 
   function createField(array) {
     const field = array.map((row) => {
@@ -65,7 +70,12 @@ const Grid = () => {
 
   // changeField(0, 0, "O");
 
-  return <div>{field}</div>;
+  return (
+    <div>
+      {field}
+      <h3>{`Current Player: ${currentPlayerX ? "X" : "O"}`}</h3>
+    </div>
+  );
 };
 
 export default Grid;
