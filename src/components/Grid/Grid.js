@@ -43,21 +43,24 @@ const Grid = () => {
   }
 
   function changeField(clickedRow, clickedCol) {
-    setNodes((prevNodes) => {
-      return prevNodes.map((value, index) => {
-        return value.map((element) => {
-          if (
-            element.rowIndex === clickedRow &&
-            element.colIndex === clickedCol
-          ) {
-            return { ...element, value: currentPlayerX ? "X" : "O" };
-          } else {
-            return { ...element };
-          }
+    if (nodes[clickedRow][clickedCol].value.length === 0) {
+      setNodes((prevNodes) => {
+        return prevNodes.map((value, index) => {
+          return value.map((element) => {
+            if (
+              element.rowIndex === clickedRow &&
+              element.colIndex === clickedCol &&
+              element.value.length === 0
+            ) {
+              return { ...element, value: currentPlayerX ? "X" : "O" };
+            } else {
+              return { ...element };
+            }
+          });
         });
       });
-    });
-    setCurrentPlayerX(!currentPlayerX);
+      setCurrentPlayerX(!currentPlayerX);
+    }
   }
 
   // changeField(0, 0, "O");
