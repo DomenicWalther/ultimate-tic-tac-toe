@@ -6,6 +6,7 @@ const Grid = () => {
   const [field, setField] = React.useState([]);
   const [currentPlayerX, setCurrentPlayerX] = React.useState(true);
   const [moves, setMoves] = React.useState(0);
+  const [playingGame, setPlayingGame] = React.useState(true);
 
   React.useEffect(() => {
     setNodes(initialArray());
@@ -16,12 +17,34 @@ const Grid = () => {
   }, [nodes]);
 
   React.useEffect(() => {
-    let value = checkRows();
-    if (value !== undefined) {
-      console.log(`Winner is: `, value === 3 ? "X" : "O");
+    let rowValue = checkRows();
+    let colValue = checkCols();
+    if (rowValue !== undefined || colValue !== undefined) {
+      console.log(`Winner is: `, rowValue === 3 || colValue === 3 ? "X" : "O");
+      setPlayingGame(false);
+    } else if (moves === 9) {
+      console.log("Game is a draw!");
+      setPlayingGame(false);
     }
+    setMoves(moves + 1);
   }, [currentPlayerX]);
 
+  function checkCols() {
+    for (let i = 0; i < nodes.length; i++) {
+      let colValue = 0;
+      for (let j = 0; j < nodes.length; j++) {
+        if (nodes[j][i].value === "X") {
+          colValue++;
+        } else if (nodes[j][i].value === "O") {
+          colValue--;
+        }
+      }
+
+      if (colValue === 3 || colValue === -3) {
+        return colValue;
+      }
+    }
+  }
   function checkRows() {
     for (let i = 0; i < nodes.length; i++) {
       let rowValue = 0;
@@ -70,6 +93,7 @@ const Grid = () => {
   }
 
   function changeField(clickedRow, clickedCol) {
+    if (!playingGame) return;
     if (nodes[clickedRow][clickedCol].value.length === 0) {
       setNodes((prevNodes) => {
         return prevNodes.map((value, index) => {
@@ -94,6 +118,7 @@ const Grid = () => {
     setNodes(initialArray());
     setCurrentPlayerX(true);
     setMoves(0);
+    setPlayingGame(true);
   }
 
   return (
