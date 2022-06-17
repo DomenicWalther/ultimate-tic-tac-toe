@@ -4,6 +4,7 @@ import React from "react";
 const Grid = () => {
   const [nodes, setNodes] = React.useState([]);
   const [field, setField] = React.useState([]);
+  const [currentPlayerX, setCurrentPlayerX] = React.useState(true);
 
   React.useEffect(() => {
     const nodeArray = [];
@@ -15,8 +16,11 @@ const Grid = () => {
       nodeArray.push(currentRow);
     }
     setNodes(nodeArray);
-    setField(createField(nodeArray));
   }, []);
+
+  React.useEffect(() => {
+    setField(createField(nodes));
+  }, [nodes]);
 
   function createField(array) {
     const field = array.map((row) => {
@@ -25,9 +29,10 @@ const Grid = () => {
           {row.map((col) => {
             return (
               <Node
-                value={col.value === "" ? "X" : col.value}
+                value={col.value}
                 rowIndex={col.rowIndex}
                 colIndex={col.colIndex}
+                handleClick={changeField}
               />
             );
           })}
@@ -37,34 +42,27 @@ const Grid = () => {
     return field;
   }
 
-  function changeField(clickedRow, clickedCol, currentPlayer) {
-    const newNodes = nodes.map((value, index) => {
-      return value.map((element) => {
-        if (
-          element.rowIndex === clickedRow &&
-          element.colIndex === clickedCol
-        ) {
-          return { ...element, value: currentPlayer };
-        } else {
-          return { ...element };
-        }
+  function changeField(clickedRow, clickedCol) {
+    setNodes((prevNodes) => {
+      return prevNodes.map((value, index) => {
+        return value.map((element) => {
+          if (
+            element.rowIndex === clickedRow &&
+            element.colIndex === clickedCol
+          ) {
+            return { ...element, value: currentPlayerX ? "X" : "O" };
+          } else {
+            return { ...element };
+          }
+        });
       });
     });
-    console.log(newNodes);
-    setNodes(newNodes);
-    setField(createField(newNodes));
+    setCurrentPlayerX(!currentPlayerX);
   }
 
   // changeField(0, 0, "O");
 
-  return (
-    <div>
-      {field}{" "}
-      <button className="changeValue" onClick={() => changeField(2, 2, "B")}>
-        Change Value{" "}
-      </button>
-    </div>
-  );
+  return <div>{field}</div>;
 };
 
 export default Grid;
