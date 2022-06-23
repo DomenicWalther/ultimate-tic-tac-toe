@@ -93,24 +93,25 @@ const Grid = () => {
   }
 
   function changeField(clickedRow, clickedCol) {
-    if (!playingGame) return;
-    if (nodes[clickedRow][clickedCol].value.length === 0) {
-      setNodes((prevNodes) => {
-        return prevNodes.map((value, index) => {
-          return value.map((element) => {
-            if (
-              element.rowIndex === clickedRow &&
-              element.colIndex === clickedCol &&
-              element.value.length === 0
-            ) {
-              return { ...element, value: currentPlayerX ? "X" : "O" };
-            } else {
-              return { ...element };
-            }
+    if (playingGame) {
+      if (nodes[clickedRow][clickedCol].value.length === 0) {
+        setNodes((prevNodes) => {
+          return prevNodes.map((value, index) => {
+            return value.map((element) => {
+              if (
+                element.rowIndex === clickedRow &&
+                element.colIndex === clickedCol &&
+                element.value.length === 0
+              ) {
+                return { ...element, value: currentPlayerX ? "X" : "O" };
+              } else {
+                return { ...element };
+              }
+            });
           });
         });
-      });
-      setCurrentPlayerX(!currentPlayerX);
+        setCurrentPlayerX(!currentPlayerX);
+      }
     }
   }
 
@@ -124,7 +125,8 @@ const Grid = () => {
   return (
     <div>
       {field}
-      <h3>{`Current Player: ${currentPlayerX ? "X" : "O"}`}</h3>
+      <h3>{`?Current Player: ${currentPlayerX ? "X" : "O"}`}</h3>
+      <h3>{`${playingGame ? "" : "Winner is X"}`}</h3>
       <button onClick={resetGame}>Reset Game</button>
     </div>
   );
